@@ -36,7 +36,7 @@ func (b *Block) CreateTokens() ([]Token, error) {
 				token := Token{
 					Name:          name,
 					NumOccurences: occurences,
-					LocationFile:  []string{b.LocationFile}, // Block has only string here, not []string
+					LocationFile:  b.LocationFile, // Block has only string here, not []string
 					LocationLine:  linesOfWord,
 				}
 
@@ -82,6 +82,5 @@ loop:
 			break loop
 		}
 	}
-	level_of_indentation := count / 4
-	return level_of_indentation
+	return count
 }
