@@ -41,7 +41,7 @@ func (b *Block) CreateTokens() {
 
 func (b *Block) blockWordMaps() (map[string]int, map[string][]int) { //Helper function for CreateTokens()
 
-	pythonKeywords := [35]string{"False", "await", "else", "import", "pass", "None", "break", "except", "in", "raise", "True", "class", "finally", "is", "return", "and", "continue", "for", "lambda", "try as", "def", "from", "nonlocal", "while", "assert", "del", "global", "not", "with", "async", "elif", "if", "or", "yield"}
+	pythonKeywords := [35]string{"False", "await", "else", "import", "pass", "None", "break", "except", "in", "raise", "True", "class", "finally", "is", "return", "and", "continue", "for", "lambda", "try", "as", "def", "from", "nonlocal", "while", "assert", "del", "global", "not", "with", "async", "elif", "if", "or", "yield"}
 
 	wordCount := make(map[string]int)   // Map to store words and their counts (word -> count)
 	wordLines := make(map[string][]int) // Map to store on which lines a word appears (word -> lines)
