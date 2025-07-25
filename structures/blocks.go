@@ -49,19 +49,23 @@ func (b *Block) blockWordMaps() (map[string]int, map[string][]int) { //Helper fu
 	lines := strings.Split(b.Code, "\n") //Splits each line of the code
 
 	for lineNum, line := range lines { //Iterates over each line
-		words := strings.Fields(line)
+		trimmed := strings.TrimSpace(line)    //Removes whitespace before "#" - we'll consider it for the indentation in another function
+		if !strings.HasPrefix(trimmed, "#") { //Completely ignores line if it starts with # (it is a comment!)
 
-		for _, w := range words {
-			isKeyword := false
-			for _, p := range pythonKeywords { //Quick loop to check if the word is a Python keyword, in which case it should be ignored
-				if w == p {
-					isKeyword = true
-					break
+			words := strings.Fields(line)
+
+			for _, w := range words {
+				isKeyword := false
+				for _, p := range pythonKeywords { //Quick loop to check if the word is a Python keyword, in which case it should be ignored
+					if w == p {
+						isKeyword = true
+						break
+					}
 				}
-			}
-			if !isKeyword {
-				wordCount[w]++                                 //Increase global word count
-				wordLines[w] = append(wordLines[w], lineNum+1) // +1 because we don't have line 0 in most IDEs
+				if !isKeyword {
+					wordCount[w]++                                 //Increase word count for this block
+					wordLines[w] = append(wordLines[w], lineNum+1) // +1 because we don't have line 0 in most IDEs
+				}
 			}
 		}
 	}
