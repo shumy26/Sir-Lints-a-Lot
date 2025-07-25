@@ -36,7 +36,7 @@ func (b *Block) CreateTokens() ([]Token, error) {
 				token := Token{
 					Name:          name,
 					NumOccurences: occurences,
-					LocationFile:  b.LocationFile, // Block has only string here, not []string
+					LocationFile:  []string{b.LocationFile}, // Block has only string here, not []string
 					LocationLine:  linesOfWord,
 				}
 
@@ -71,12 +71,17 @@ func (b *Block) blockWordMaps() (map[string]int, map[string][]int) { //Helper fu
 
 func countLeadingWhitespace(line string) int { //Helper function to count the leading whitespace on each line of the code
 	count := 0
+loop:
 	for _, ch := range line {
-		if ch == ' ' || ch == '\t' { //Separates by leading whitespace or "tabs"
+		switch ch {
+		case ' ': //Separates by leading whitespace or "tabs"
 			count++
-		} else {
-			break
+		case '\t':
+			count += 4 //Assuming a tab is equivalent to 4 spaces.
+		default:
+			break loop
 		}
 	}
-	return count
+	level_of_indentation := count / 4
+	return level_of_indentation
 }
