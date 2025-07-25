@@ -13,6 +13,8 @@ func (t *GlobalTokenMap) AddToken(token Token) error {
 	} else if token.NumOccurences <= 1 {
 		t.TokenMap[token.Name] = token
 		t.TokensWithProblems[token.Name] = token
+	} else {
+		t.TokenMap[token.Name] = token
 	}
 	return nil
 }
