@@ -31,21 +31,12 @@ func (b *Block) CreateTokens() ([]Token, error) {
 	for name, occurences := range wordCount { //Iterate over the map
 		for wordname, wordLines := range wordLines {
 			if name == wordname {
-				linesOfWord := wordLines
-
-				token := Token{
-					Name:          name,
-					NumOccurences: occurences,
-					LocationFile:  b.LocationFile, // Block has only string here, not []string
-					LocationLine:  linesOfWord,
-				}
-
-				tokenList = append(tokenList, token)
+				token := NewToken(name, b.LocationFile, occurences, wordLines) //function from tokens.go
+				tokenList = append(tokenList, token)                           //append to a list of all Tokens on this block
 			}
 		}
 
 	}
-
 	return tokenList, nil
 }
 
