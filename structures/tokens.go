@@ -10,7 +10,7 @@ type Token struct {
 }
 
 func (t Token) PrintToken() error {
-	if len(t.LocationFile) != len(t.LocationLine) {
+	if len(t.LocationFile) != len(t.LocationLine) || len(t.LocationFile) != t.NumOccurences {
 		return fmt.Errorf("Token has inconsistent number of occurences")
 	}
 	fmt.Printf("Token %s with %d occurences at locations:\n", t.Name, t.NumOccurences)
@@ -23,4 +23,5 @@ func (t Token) PrintToken() error {
 func (t *Token) AddOccurence(file string, line int) {
 	t.LocationFile = append(t.LocationFile, file)
 	t.LocationLine = append(t.LocationLine, line)
+	t.NumOccurences++
 }
