@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 )
@@ -13,18 +14,15 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("No file found")
-		os.Exit(1)
+		log.Fatal("No file found")
 	}
 	path := os.Args[1]
 	if !strings.HasSuffix(path, ".py") {
-		fmt.Println("Not a Python file")
-		os.Exit(1)
+		log.Fatal("Not a Python file")
 	}
 	fileBytes, err := os.ReadFile(path)
 	if err != nil {
-		fmt.Println("Error reading file")
-		os.Exit(1)
+		log.Fatalf("Error reading file: %v", err)
 	}
 	fileText := string(fileBytes)
 	fmt.Println(fileText)
