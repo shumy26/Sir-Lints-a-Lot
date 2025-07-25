@@ -22,7 +22,7 @@ func CreateBlock(code, file string, lineStart, lineEnd int) Block {
 	return block
 }
 
-func (b *Block) CreateTokens() ([]Token, error) {
+func (b *Block) CreateTokens() {
 
 	var tokenList []Token
 
@@ -35,9 +35,8 @@ func (b *Block) CreateTokens() ([]Token, error) {
 				tokenList = append(tokenList, token)                           //append to a list of all Tokens on this block
 			}
 		}
-
 	}
-	return tokenList, nil
+	b.TokenList = append(b.TokenList, tokenList...)
 }
 
 func (b *Block) blockWordMaps() (map[string]int, map[string][]int) { //Helper function for CreateTokens()
