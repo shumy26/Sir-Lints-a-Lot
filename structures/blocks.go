@@ -8,6 +8,7 @@ type Block struct {
 	TokenList         []Token
 }
 
+
 func CreateBlock(code, file string, lineStart, lineEnd int) Block {
 	block := Block{
 		Code:              code,
@@ -20,38 +21,53 @@ func CreateBlock(code, file string, lineStart, lineEnd int) Block {
 
 func (b *Block) CreateTokens() []Token, error { //DONT FORGET TO IMPORT "strings"
 
-	wordList, numOccurences := blockWordList(b *Block)
+	wordList, numOccurences := blockWordMaps(b *Block)
+	
+	for i := 0; i < len(wordList); i++ {
+
+		token := Token{
+			Name:          wordList[i]
+			NumOccurences: numOccurences[i]
+			LocationFile  []string
+			LocationLine  []int
+
+		}
+
+	}
 
 	return nil
 }
 
-func blockWordList(b *Block) []string, []int { //Helper function for CreateTokens()
-	 wordCount := make(map[string]int) // Map to store words and their counts
+func blockWordMaps(b *Block) map[string]int,  { //Helper function for CreateTokens()
 
-    lines := strings.Split(b.Code, "\n")
+	wordCount := make(map[string]int) 	 	// Map to store words and their counts (word -> count)
+	wordLineCount := make(map[string][]int)  // Map to store on which lines a word appears (word -> lines)
+    wordLineOccur := make(map[string][]int)   // Map to store num of occurences per line of a word (word -> occurences)
 
-    for _, line := range lines {
-        words := strings.Fields(line) //Separate words on each line
+    lines := strings.Split(b.Code, "\n") //Splits each line of the code
+
+ 	for lineNum, line := range lines { //Iterates over each line
+        words := strings.Fields(line)
+        lineWordCount := make(map[string]int)
+
         for _, w := range words {
-            wordCount[w]++
+            wordCount[w]++ //Increase global word count
+            lineWordCount[w]++ //Word count JUST for that particular line
+        }
+
+        for w, count := range lineWordCount {
+            wordLineCount[w] = append(wordLineCount[w], lineNum+1) // +1 because we don't have line 0 in most IDEs
+            wordLineOccur[w] = append(wordLineOccur[w], count)
         }
     }
 
-    var wordList []string
-    var numOccurences []int
-
-    for word, count := range wordCount {
-        wordList = append(wordList, word)
-        numOccurences = append(numOccurences, count)
-    }
-	
-    return wordList, numOccurences
+    return wordCount, wordLineCount, wordLineOccur
 }
 
 func countLeadingWhitespace(line string) int { //Helper function to count the leading whitespace on each line of the code
     count := 0
     for _, ch := range line {
-        if ch == ' ' || ch == '\t' {
+        if ch == ' ' || ch == '\t' { //Separates by leading whitespace or "tabs"
             count++
         } else {
             break
@@ -59,10 +75,3 @@ func countLeadingWhitespace(line string) int { //Helper function to count the le
     }
     return count
 }
-
-/* type Token struct {
-	Name          string
-	NumOccurences int
-	LocationFile  []string
-	LocationLine  []int
-} */
