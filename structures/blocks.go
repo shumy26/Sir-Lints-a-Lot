@@ -1,6 +1,7 @@
 package structures
 
 import (
+	"regexp"
 	"strings"
 )
 
@@ -42,8 +43,11 @@ func (b *Block) CreateTokens() {
 
 func (b *Block) blockWordMaps() (map[string]int, map[string][]int) { //Helper function for CreateTokens()
 
+	var re = regexp.MustCompile(`[A-Za-z_][A-Za-z_0-9]*|[^\sA-Za-z_0-9]`) //General regex to separate words and symbols WITHOUT whitespaces
+
 	pythonKeywords := [35]string{"False", "await", "else", "import", "pass", "None", "break", "except", "in", "raise", "True", "class", "finally", "is", "return", "and", "continue", "for", "lambda", "try", "as", "def", "from", "nonlocal", "while", "assert", "del", "global", "not", "with", "async", "elif", "if", "or", "yield"}
-	pythonOps := [34]string{"+", "-", "*", "/", "//", "%", "**", "==", "!=", ">", "<", ">=", "<=", "=", "+=", "-=", "*=", "/=", "//=", "%=", "**=", "&=", "|=", "^=", ">>=", "<<=", "&", "|", "^", "~", "<<", ">>"}
+	pythonOps := [41]string{"'", "(", ")", "{", "}", "[", "]", "+", "-", "*", "/", "//", "%", "**", "==", "!=", ">", "<", ">=", "<=", "=", "+=", "-=", "*=", "/=", "//=", "%=", "**=", "&=", "|=", "^=", ">>=", "<<=", "&", "|", "^", "~", "<<", ">>"}
+	//Note that pythonOps includes things like (), {} and [] at this moment
 
 	wordCount := make(map[string]int)   // Map to store words and their counts (word -> count)
 	wordLines := make(map[string][]int) // Map to store on which lines a word appears (word -> lines)
@@ -54,7 +58,7 @@ func (b *Block) blockWordMaps() (map[string]int, map[string][]int) { //Helper fu
 		trimmed := strings.TrimSpace(line)    //Removes whitespace before "#" - we'll consider it for the indentation in another function
 		if !strings.HasPrefix(trimmed, "#") { //Completely ignores line if it starts with # (it is a comment!)
 
-			words := strings.Fields(line)
+			words := re.FindAllString(line, -1) //Get words and symbols on line WITHOUT whitespaces
 
 			for _, w := range words {
 				isKeyword := false
