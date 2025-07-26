@@ -42,6 +42,7 @@ func (b *Block) CreateTokens() {
 func (b *Block) blockWordMaps() (map[string]int, map[string][]int) { //Helper function for CreateTokens()
 
 	pythonKeywords := [35]string{"False", "await", "else", "import", "pass", "None", "break", "except", "in", "raise", "True", "class", "finally", "is", "return", "and", "continue", "for", "lambda", "try", "as", "def", "from", "nonlocal", "while", "assert", "del", "global", "not", "with", "async", "elif", "if", "or", "yield"}
+	pythonOps := [34]string{"+", "-", "*", "/", "//", "%", "**", "==", "!=", ">", "<", ">=", "<=", "=", "+=", "-=", "*=", "/=", "//=", "%=", "**=", "&=", "|=", "^=", ">>=", "<<=", "&", "|", "^", "~", "<<", ">>"}
 
 	wordCount := make(map[string]int)   // Map to store words and their counts (word -> count)
 	wordLines := make(map[string][]int) // Map to store on which lines a word appears (word -> lines)
@@ -56,13 +57,20 @@ func (b *Block) blockWordMaps() (map[string]int, map[string][]int) { //Helper fu
 
 			for _, w := range words {
 				isKeyword := false
-				for _, p := range pythonKeywords { //Quick loop to check if the word is a Python keyword, in which case it should be ignored
+				isPythonOp := false
+				for _, p := range pythonKeywords { //Ignores Python Keywords
 					if w == p {
 						isKeyword = true
 						break
 					}
 				}
-				if !isKeyword {
+				for _, op := range pythonOps { //Ignores Python Math/Logical operators
+					if w == op {
+						isPythonOp = true
+						break
+					}
+				}
+				if !isKeyword && !isPythonOp {
 					wordCount[w]++                                 //Increase word count for this block
 					wordLines[w] = append(wordLines[w], lineNum+1) // +1 because we don't have line 0 in most IDEs
 				}
