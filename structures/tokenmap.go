@@ -10,7 +10,7 @@ type GlobalTokenMap struct {
 func (t *GlobalTokenMap) AddToken(token Token) error {
 	if _, ok := t.TokenMap[token.Name]; ok {
 		return fmt.Errorf("token with this name already exists")
-	} else if token.NumOccurences <= 1 {
+	} else if token.NumOccurrences <= 1 {
 		t.TokenMap[token.Name] = token
 		t.TokensWithProblems[token.Name] = token
 	} else {
