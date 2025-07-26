@@ -37,7 +37,7 @@ func main() {
 		for i := 0; i < len(block.TokenList); i++ {
 			fmt.Println(" ")
 			fmt.Printf("Name:\t%v\n", block.TokenList[i].Name)
-			fmt.Printf("Occurances:\t%v\n", block.TokenList[i].NumOccurences)
+			fmt.Printf("Occurrences:\t%v\n", block.TokenList[i].NumOccurrences)
 			fmt.Printf("Line Number:\t%v\n", block.TokenList[i].LocationLine)
 			fmt.Printf("File:\t%v\n", block.TokenList[i].LocationFile)
 			fmt.Println(" ")
