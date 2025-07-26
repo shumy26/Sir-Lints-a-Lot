@@ -30,15 +30,17 @@ func main() {
 	}
 	fileText := string(fileBytes)
 
-	block := structures.CreateBlock(fileText, path, 0, 100)
-	block.CreateTokens()
+	blockList := structures.BlocksFromFile(fileText, path)
 
-	for i := 0; i < len(block.TokenList); i++ {
-		fmt.Println(" ")
-		fmt.Printf("Name:\t%v\n", block.TokenList[i].Name)
-		fmt.Printf("Occurances:\t%v\n", block.TokenList[i].NumOccurences)
-		fmt.Printf("Line Number:\t%v\n", block.TokenList[i].LocationLine)
-		fmt.Printf("File:\t%v\n", block.TokenList[i].LocationFile)
-		fmt.Println(" ")
+	for _, block := range blockList {
+		fmt.Println(block, " ")
+		for i := 0; i < len(block.TokenList); i++ {
+			fmt.Println(" ")
+			fmt.Printf("Name:\t%v\n", block.TokenList[i].Name)
+			fmt.Printf("Occurances:\t%v\n", block.TokenList[i].NumOccurences)
+			fmt.Printf("Line Number:\t%v\n", block.TokenList[i].LocationLine)
+			fmt.Printf("File:\t%v\n", block.TokenList[i].LocationFile)
+			fmt.Println(" ")
+		}
 	}
 }

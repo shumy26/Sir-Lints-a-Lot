@@ -19,6 +19,7 @@ func CreateBlock(code, file string, lineStart, lineEnd int) Block {
 		LocationLineStart: lineStart,
 		LocationLineEnd:   lineEnd,
 	}
+	block.CreateTokens()
 	return block
 }
 
@@ -86,4 +87,44 @@ loop:
 		}
 	}
 	return count
+}
+
+func BlocksFromFile(fileText, fileName string) []Block {
+	blockList := make([]Block, 0)
+
+	lines := strings.Split(fileText, "\n")
+
+	indentationList := make([]int, 0)
+	for _, line := range lines {
+		indentationLevel := countLeadingWhitespace(line)
+		indentationList = append(indentationList, indentationLevel)
+	}
+
+	for idx := 0; idx < len(indentationList); idx++ {
+		endIdx := idx
+		if idx == 0 {
+			//global scope, block with the whole code
+			endIdx = len(indentationList)
+			code := strings.Join(lines[idx:endIdx], "\n")
+			blockList = append(blockList, CreateBlock(
+				code,
+				fileName,
+				idx+1,
+				endIdx))
+		} else {
+			if indentationList[idx] > indentationList[idx-1] {
+				for j := idx + 1; j < len(indentationList) && indentationList[j] >= indentationList[idx]; j++ {
+					endIdx = j
+				}
+				code := strings.Join(lines[idx:endIdx+1], "\n")
+				blockList = append(blockList, CreateBlock(
+					code,
+					fileName,
+					idx+1,
+					endIdx+1,
+				))
+			}
+		}
+	}
+	return blockList
 }
