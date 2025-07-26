@@ -3,33 +3,33 @@ package structures
 import "fmt"
 
 type Token struct {
-	Name          string
-	NumOccurences int
-	LocationFile  string
-	LocationLine  []int
+	Name           string
+	NumOccurrences int
+	LocationFile   string
+	LocationLine   []int
 }
 
 func (t Token) PrintToken() error {
-	if len(t.LocationFile) != len(t.LocationLine) || len(t.LocationFile) != t.NumOccurences {
-		return fmt.Errorf("Token has inconsistent number of occurences")
+	if len(t.LocationFile) != len(t.LocationLine) || len(t.LocationFile) != t.NumOccurrences {
+		return fmt.Errorf("Token has inconsistent number of occurrences")
 	}
-	fmt.Printf("Token %s with %d occurences at locations:\n", t.Name, t.NumOccurences)
+	fmt.Printf("Token %s with %d occurrences at locations:\n", t.Name, t.NumOccurrences)
 	for i := range t.LocationFile {
 		fmt.Printf("%s at line %d\n", t.LocationFile, t.LocationLine[i])
 	}
 	return nil
 }
 
-func (t *Token) AddOccurence(file string, line int) {
+func (t *Token) AddOccurrence(file string, line int) {
 	t.LocationLine = append(t.LocationLine, line)
-	t.NumOccurences++
+	t.NumOccurrences++
 }
 
-func NewToken(name, file string, numOccurences int, lines []int) Token {
+func NewToken(name, file string, numOccurrences int, lines []int) Token {
 	return Token{
-		Name:          name,
-		LocationFile:  file,
-		NumOccurences: numOccurences,
-		LocationLine:  lines,
+		Name:           name,
+		LocationFile:   file,
+		NumOccurrences: numOccurrences,
+		LocationLine:   lines,
 	}
 }
