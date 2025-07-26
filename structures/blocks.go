@@ -10,22 +10,24 @@ type Block struct {
 	LocationFile      string
 	LocationLineStart int
 	LocationLineEnd   int
-	TokenList         []Token
+	TokenList         []Token //should use CreateTokens()
+	IndentationLevel  int     //should use determineIndentation()
 }
 
-func CreateBlock(code, file string, lineStart, lineEnd int) Block {
+func CreateBlock(code, file string, lineStart, lineEnd, IndentLvl int) Block {
 	block := Block{
 		Code:              code,
 		LocationFile:      file,
 		LocationLineStart: lineStart,
 		LocationLineEnd:   lineEnd,
+		TokenList:         nil, //Initialized as nil slice so we can use CreateTokens() right after
+		IndentationLevel:  IndentLvl,
 	}
 	block.CreateTokens()
 	return block
 }
 
-func (b *Block) CreateTokens() {
-
+func (b *Block) CreateTokens() []Token { //Receives a Block and returns a slice of Tokens created based on it
 	var tokenList []Token
 
 	wordCount, wordLines := b.blockWordMaps()
@@ -39,6 +41,7 @@ func (b *Block) CreateTokens() {
 		}
 	}
 	b.TokenList = append(b.TokenList, tokenList...)
+	return tokenList
 }
 
 func (b *Block) blockWordMaps() (map[string]int, map[string][]int) { //Helper function for CreateTokens()
@@ -87,7 +90,7 @@ func (b *Block) blockWordMaps() (map[string]int, map[string][]int) { //Helper fu
 	return wordCount, wordLines
 }
 
-func countLeadingWhitespace(line string) int { //Helper function to count the leading whitespace on each line of the code
+func determineIndentation(line string) int { //Helper function to count the leading whitespace on each line of the code
 	count := 0
 loop:
 	for _, ch := range line {
