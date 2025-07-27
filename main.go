@@ -15,18 +15,23 @@ import (
 //}
 
 func main() {
-	if len(os.Args) < 2 {
-		var files []string
-		err := grabFiles(".", &files)
-		if err != nil {
-			log.Fatalf("Error grabbing files: %v", err)
+
+	if len(os.Args) > 1 {
+		if os.Args[1] != "--verbose" || os.Args[1] != "-v" {
+			log.Fatalf("Invalid argument: %s. either run with no arguments or with --verbose or -v", os.Args[1])
 		}
-		fmt.Println("Files found in the directory:")
-		for _, file := range files {
-			fmt.Println(file)
-		}
-		log.Print("Please enter a Python file path from this list.")
 	}
+
+	var files []string
+	err := grabFiles(".", &files)
+	if err != nil {
+		log.Fatalf("Error grabbing files: %v", err)
+	}
+	fmt.Println("Files found in the directory:")
+	for _, file := range files {
+		fmt.Println(file)
+	}
+	log.Print("Please enter a Python file path from this list.")
 
 	var input string
 	fmt.Scanln(&input)
@@ -44,27 +49,27 @@ func main() {
 
 	blockList := structures.BlocksFromFile(fileText, path)
 
-	_ = blockList
-
-	// Testing block, uncomment to see the output:
-
-	/*for _, block := range blockList {
-
-		fmt.Println(block, " ")
-		for i := 0; i < len(block.TokenList); i++ {
-			fmt.Println(" ")
-			fmt.Printf("Name:\t%v\n", block.TokenList[i].Name)
-			fmt.Printf("Occurrences:\t%v\n", block.TokenList[i].NumOccurrences)
-			fmt.Printf("Line Number:\t%v\n", block.TokenList[i].LocationLine)
-			fmt.Printf("File:\t%v\n", block.TokenList[i].LocationFile)
-			fmt.Println(" ")
+	// Testing block, add --verbose or -v to see the output.
+	for _, arg := range os.Args[1:] {
+		if arg == "--verbose" || arg == "-v" {
+			fmt.Println("Blocks found in the file:")
+			fmt.Println(len(blockList))
+			for _, block := range blockList {
+				fmt.Printf("Block code:\n%s\n", block.Code)
+				fmt.Printf("Start Line: %d, End Line: %d\n", block.LocationLineStart, block.LocationLineEnd)
+				fmt.Println()
+			}
+			for _, block := range blockList {
+				fmt.Println(block, " ")
+				for i := 0; i < len(block.TokenList); i++ {
+					fmt.Println(" ")
+					fmt.Printf("Name:\t%v\n", block.TokenList[i].Name)
+					fmt.Printf("Occurrences:\t%v\n", block.TokenList[i].NumOccurrences)
+					fmt.Printf("Line Number:\t%v\n", block.TokenList[i].LocationLine)
+					fmt.Printf("File:\t%v\n", block.TokenList[i].LocationFile)
+					fmt.Println(" ")
+				}
+			}
 		}
 	}
-	fmt.Println("Blocks found in the file:")
-	fmt.Println(len(blockList))
-	for _, block := range blockList {
-		fmt.Printf("Block code:\n%s\n", block.Code)
-		fmt.Printf("Start Line: %d, End Line: %d\n", block.LocationLineStart, block.LocationLineEnd)
-		fmt.Println()
-	}*/
 }
