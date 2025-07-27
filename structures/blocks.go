@@ -46,10 +46,10 @@ func (b *Block) CreateTokens() []Token { //Receives a Block and returns a slice 
 
 func (b *Block) blockWordMaps() (map[string]int, map[string][]int) { //Helper function for CreateTokens()
 
-	var genRe = regexp.MustCompile(`[A-Za-z_][A-Za-z_0-9]*(\.[A-Za-z_][A-Za-z_0-9]*)*|[^\sA-Za-z_0-9.]`) //General regex to separate words and symbols WITHOUT whitespaces, maintaining dots
-	var betweenQuotes = regexp.MustCompile(`"[^"]*"|\([^)]*\)`)                                          //Selects strings - stuff between quotes "" - so we may ignore them
+	var identifierRe = regexp.MustCompile(`[A-Za-z_][A-Za-z_0-9]*(\.[A-Za-z_][A-Za-z_0-9]*)*`)
+	var betweenQuotes = regexp.MustCompile(`"[^"]*"`) // Only ignore double-quoted strings
 
-	pythonKeywords := [35]string{"False", "await", "else", "import", "pass", "None", "break", "except", "in", "raise", "True", "class", "finally", "is", "return", "and", "continue", "for", "lambda", "try", "as", "def", "from", "nonlocal", "while", "assert", "del", "global", "not", "with", "async", "elif", "if", "or", "yield"}
+	pythonKeywords := [39]string{"False", "range", "print", "__repr__", "__init__", "await", "else", "import", "pass", "None", "break", "except", "in", "raise", "True", "class", "finally", "is", "return", "and", "continue", "for", "lambda", "try", "as", "def", "from", "nonlocal", "while", "assert", "del", "global", "not", "with", "async", "elif", "if", "or", "yield"}
 	pythonOps := [41]string{"'", "(", ")", "{", "}", "[", "]", "+", "-", "*", "/", "//", "%", "**", "==", "!=", ">", "<", ">=", "<=", "=", "+=", "-=", "*=", "/=", "//=", "%=", "**=", "&=", "|=", "^=", ">>=", "<<=", "&", "|", "^", "~", "<<", ">>"}
 	//Note that pythonOps includes things like (), {} and [] at this moment
 
@@ -59,11 +59,14 @@ func (b *Block) blockWordMaps() (map[string]int, map[string][]int) { //Helper fu
 	lines := strings.Split(b.Code, "\n") //Splits each line of the code
 
 	for lineNum, line := range lines { //Iterates over each line
+		line = stripPythonComment(line)
 		trimmed := strings.TrimSpace(line)    //Removes whitespace before "#" - we'll consider it for the indentation in another function
 		if !strings.HasPrefix(trimmed, "#") { //Completely ignores line if it starts with # (it is a comment!)
 
 			removeInQuotes := betweenQuotes.ReplaceAllString(trimmed, "") //Ignores strings (anything between quotes "")
-			words := genRe.FindAllString(removeInQuotes, -1)              //Get words and symbols on line WITHOUT whitespaces
+
+			// Find all identifiers (including self.hello, obj.attr, etc.)
+			words := identifierRe.FindAllString(removeInQuotes, -1)
 
 			for _, w := range words {
 				isKeyword := false
@@ -146,4 +149,32 @@ func BlocksFromFile(fileText, fileName string) []Block {
 		}
 	}
 	return blockList
+}
+
+func stripPythonComment(line string) string {
+	inString := false
+	var quoteChar rune
+	var result []rune
+
+	for i, ch := range line {
+		if inString {
+			result = append(result, ch)
+			if ch == quoteChar {
+				if i > 0 && line[i-1] != '\\' {
+					inString = false
+				}
+			}
+		} else {
+			if ch == '"' || ch == '\'' {
+				inString = true
+				quoteChar = ch
+				result = append(result, ch)
+			} else if ch == '#' {
+				break // Start of comment outside string
+			} else {
+				result = append(result, ch)
+			}
+		}
+	}
+	return string(result)
 }
