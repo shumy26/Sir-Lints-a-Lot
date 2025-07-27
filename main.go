@@ -15,6 +15,10 @@ var globalTokenMap = &structures.GlobalTokenMap{
 	TokenMap:           make(map[string]structures.Token),
 	TokensWithProblems: make(map[string]structures.Token),
 }
+var globalTokenMap = &structures.GlobalTokenMap{
+	TokenMap:           make(map[string]structures.Token),
+	TokensWithProblems: make(map[string]structures.Token),
+}
 
 func main() {
 
@@ -51,6 +55,38 @@ func main() {
 
 	blockList := structures.BlocksFromFile(fileText, path)
 
+	fmt.Println("Please choose the scope you want to inspect:")
+	for idx, block := range blockList {
+		if idx == 0 {
+			fmt.Printf("Global Scope (0) from lines: <-- %d : %d -->\n", block.LocationLineStart, block.LocationLineEnd)
+		} else {
+			fmt.Printf("Scope %d from lines : <-- %d : %d -->\n", idx, block.LocationLineStart, block.LocationLineEnd)
+		}
+
+	}
+
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Print("Enter your choice (scope number, 0 for global): ")
+		input, _ := reader.ReadString('\n')
+		inputStr := strings.TrimSpace(input)
+		inputInt, err := strconv.Atoi(inputStr)
+		if err != nil {
+			log.Fatal("Invalid input, please choose a number")
+		}
+
+		if inputInt >= len(blockList) {
+			fmt.Printf("Invalid choice %d, please enter a valid number\n", inputInt)
+		} else {
+			block := blockList[inputInt]
+			for i := 0; i < len(block.TokenList); i++ {
+				globalTokenMap.AddToken(block.TokenList[i])
+			}
+			//fmt.Println(globalTokenMap)
+			break
+
+		}
+	}
 
 	// Testing block, add --verbose or -v to see the output.
 	for _, arg := range os.Args[1:] {
