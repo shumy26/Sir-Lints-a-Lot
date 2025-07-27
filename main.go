@@ -51,29 +51,6 @@ func main() {
 
 	blockList := structures.BlocksFromFile(fileText, path)
 
-
-	// Testing block, add --verbose or -v to see the output.
-	for _, arg := range os.Args[1:] {
-		if arg == "--verbose" || arg == "-v" {
-			fmt.Println("Blocks found in the file:")
-			fmt.Println(len(blockList))
-			for _, block := range blockList {
-				fmt.Printf("Block code:\n%s\n", block.Code)
-				fmt.Printf("Start Line: %d, End Line: %d\n", block.LocationLineStart, block.LocationLineEnd)
-				fmt.Println()
-			}
-			for _, block := range blockList {
-				fmt.Println(block, " ")
-				for i := 0; i < len(block.TokenList); i++ {
-					fmt.Println(" ")
-					fmt.Printf("Name:\t%v\n", block.TokenList[i].Name)
-					fmt.Printf("Occurrences:\t%v\n", block.TokenList[i].NumOccurrences)
-					fmt.Printf("Line Number:\t%v\n", block.TokenList[i].LocationLine)
-					fmt.Printf("File:\t%v\n", block.TokenList[i].LocationFile)
-					fmt.Println(" ")
-				}
-			}
-
 	fmt.Println("Please choose the scope you want to inspect:")
 	for idx, block := range blockList {
 		if idx == 0 {
@@ -104,6 +81,30 @@ func main() {
 			//fmt.Println(globalTokenMap)
 			break
 
+		}
+	}
+
+	// Testing block, add --verbose or -v to see the output.
+	for _, arg := range os.Args[1:] {
+		if arg == "--verbose" || arg == "-v" {
+			fmt.Println("Blocks found in the file:")
+			fmt.Println(len(blockList))
+			for _, block := range blockList {
+				fmt.Printf("Block code:\n%s\n", block.Code)
+				fmt.Printf("Start Line: %d, End Line: %d\n", block.LocationLineStart, block.LocationLineEnd)
+				fmt.Println()
+			}
+			for _, block := range blockList {
+				fmt.Println(block, " ")
+				for i := 0; i < len(block.TokenList); i++ {
+					fmt.Println(" ")
+					fmt.Printf("Name:\t%v\n", block.TokenList[i].Name)
+					fmt.Printf("Occurrences:\t%v\n", block.TokenList[i].NumOccurrences)
+					fmt.Printf("Line Number:\t%v\n", block.TokenList[i].LocationLine)
+					fmt.Printf("File:\t%v\n", block.TokenList[i].LocationFile)
+					fmt.Println(" ")
+				}
+			}
 		}
 	}
 }
