@@ -113,7 +113,7 @@ func BlocksFromFile(fileText, fileName string) []Block {
 
 	indentationList := make([]int, 0)
 	for _, line := range lines {
-		indentationLevel := countLeadingWhitespace(line)
+		indentationLevel := determineIndentation(line)
 		indentationList = append(indentationList, indentationLevel)
 	}
 
@@ -127,7 +127,8 @@ func BlocksFromFile(fileText, fileName string) []Block {
 				code,
 				fileName,
 				idx+1,
-				endIdx))
+				endIdx,
+				indentationList[idx]))
 		} else {
 			if indentationList[idx] > indentationList[idx-1] {
 				for j := idx + 1; j < len(indentationList) && indentationList[j] >= indentationList[idx]; j++ {
@@ -139,6 +140,7 @@ func BlocksFromFile(fileText, fileName string) []Block {
 					fileName,
 					idx+1,
 					endIdx+1,
+					indentationList[idx],
 				))
 			}
 		}

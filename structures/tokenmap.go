@@ -1,9 +1,9 @@
 package structures
 
-import {
-	"fmt"
+import (
 	"errors"
-	}
+	"fmt"
+)
 
 type GlobalTokenMap struct {
 	TokenMap           map[string]Token // key is token name
@@ -22,17 +22,17 @@ func (t *GlobalTokenMap) AddToken(token Token) error {
 	return nil
 }
 
-func analyzeCode(t *GlobalTokenMap) ([]string, error) {
+func AnalyzeCode(t *GlobalTokenMap) ([]string, error) {
 	var problems []string
 
 	if len(t.TokensWithProblems) > 0 {
 		for _, value := range t.TokensWithProblems {
-		
-		errorString := fmt.Sprintf("Variable %s was declared on line %d but wasn't used!", value.Name, value.LocationLine[0])
-		problems = append(problems, errorString)
-	}
-	}else{
-		return nil, errors.New("No problematic tokens found!")
+
+			errorString := fmt.Sprintf("Variable \033[1;31m'%s'\033[0m was declared on line %d but wasn't used!\n", value.Name, value.LocationLine[0])
+			problems = append(problems, errorString)
+		}
+	} else {
+		return nil, errors.New("no problematic tokens found")
 	}
 
 	return problems, nil

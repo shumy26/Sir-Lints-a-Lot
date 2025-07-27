@@ -19,7 +19,7 @@ var globalTokenMap = &structures.GlobalTokenMap{
 func main() {
 
 	if len(os.Args) > 1 {
-		if os.Args[1] != "--verbose" || os.Args[1] != "-v" {
+		if os.Args[1] != "--verbose" && os.Args[1] != "-v" {
 			log.Fatalf("Invalid argument: %s. either run with no arguments or with --verbose or -v", os.Args[1])
 		}
 	}
@@ -78,7 +78,13 @@ func main() {
 			for i := 0; i < len(block.TokenList); i++ {
 				globalTokenMap.AddToken(block.TokenList[i])
 			}
-			//fmt.Println(globalTokenMap)
+			problematic, err := structures.AnalyzeCode(globalTokenMap)
+			if err != nil {
+				log.Print(err)
+			}
+			for _, str := range problematic {
+				fmt.Print(str)
+			}
 			break
 
 		}
