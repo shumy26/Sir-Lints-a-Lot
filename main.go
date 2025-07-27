@@ -43,11 +43,13 @@ func main() {
 	fileText := string(fileBytes)
 
 	blockList := structures.BlocksFromFile(fileText, path)
+
 	_ = blockList
 
 	// Testing block, uncomment to see the output:
 
 	/*for _, block := range blockList {
+
 		fmt.Println(block, " ")
 		for i := 0; i < len(block.TokenList); i++ {
 			fmt.Println(" ")
