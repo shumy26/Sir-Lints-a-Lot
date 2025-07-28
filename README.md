@@ -34,8 +34,7 @@ then follow the instructions provided by the mighty Knight, selecting the file y
 ```bash
 $ rm -rf Sir-Lints-a-Lot
 ```
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
 
 
 
