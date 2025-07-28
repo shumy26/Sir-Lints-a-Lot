@@ -24,21 +24,21 @@ func main() {
 		}
 	}
 
-	var files []string
+	var input int
+	var files []file
 	err := grabFiles(".", &files)
 	if err != nil {
 		log.Fatalf("Error grabbing files: %v", err)
 	}
 	fmt.Println("Files found in the directory:")
-	for _, file := range files {
-		fmt.Println(file)
+	for i, file := range files {
+		fmt.Printf("%d : %s\n", i, file.name)
 	}
-	log.Print("Please enter a Python file path from this list.")
 
-	var input string
+	log.Print("Please select a file path from this list by entering the relevant number.")
 	fmt.Scanln(&input)
 
-	path := input
+	path := files[input].path
 	if !strings.HasSuffix(path, ".py") {
 		log.Fatalf("Not a Python file")
 	}

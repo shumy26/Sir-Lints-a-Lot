@@ -53,7 +53,7 @@ func flavourGenerator() string {
 		"Armaments, chapter two, verses nine through twenty-one. And the Lord spake, saying, First shalt thou declare %v%vm%s%v on line %v%vm%d%v and then shalt thou use it.\n",
 		"Look you stupid bastard you've declared %v%vm%s%v on line %v%vm%d%v and haven't used it. Yes I have, Look! It's just a flesh wound.\n",
 		"Come and see the violence inherent in the system. Help! Help! I'm being forced to declare %v%vm%s%v on line %v%vm%d%v without using it!\n",
-		"Ni! you must go to the enchanted forest and declare the largest variable named %v%vm%s%v with a herring on line %v%vm%d%v, and then use it. Ni, Ni, Ni!",
+		"Ni! you must go to the enchanted forest and declare the largest variable named %v%vm%s%v with a herring on line %v%vm%d%v, and then use it. Ni, Ni, Ni!\n",
 	}
 	return flavour[rand.Intn(len(flavour))]
 }
