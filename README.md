@@ -4,6 +4,7 @@ The honored Sir Lints-a-Lot of the Knights of the Round Table has arrived to che
 
 If your code is pure and free of unused bits, you may pass. But if not, beware! For Sir Lints-a-Lot will unleash the Killer Rabbit of code reviews, and only the Holy Hand Grenade of Refactoring can save you.
 
+---
 
 - Checks for unused variables and functions in ~~Monty~~ Python files.
 
