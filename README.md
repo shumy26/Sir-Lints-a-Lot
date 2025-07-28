@@ -6,6 +6,7 @@ If your code is pure and free of unused bits, you may pass. But if not, beware! 
 
 ---
 
+
 - Checks for unused variables and functions in ~~Monty~~ Python files.
 
 ## boot.dev hackathon
@@ -19,6 +20,17 @@ $ git clone https://github.com/shumy/Sir-Lints-a-Lot.git
 ```
 ## Usage
 
+This will check for every python file in the folder the binary is run in and its subdirectories.
+You can either move the binary to a directory with your Python files or run it from the `Sir-Lints-a-Lot` directory by moving the files to the `python_files` directory.
+
+In case you move the binary:
+```bash
+$ go build -o sir-lints-a-lot 
+$ mv sir-lints-a-lot <path/to/your/python/files>
+$ ./sir-lints-a-lot
+``` 
+
+Otherwise:
 Copy your python files to the `Sir-Lints-a-Lot/python_files` directory and run the following commands:
 
 ```bash
