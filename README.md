@@ -27,6 +27,7 @@ In case you move the binary:
 ```bash
 $ go build -o sir-lints-a-lot 
 $ mv sir-lints-a-lot <path/to/your/python/files>
+$ cd path/to/your/python/files
 $ ./sir-lints-a-lot
 ``` 
 
