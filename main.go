@@ -32,7 +32,7 @@ func main() {
 	}
 	fmt.Println("Files found in the directory:")
 	for i, file := range files {
-		fmt.Printf("%d : %s\n", i, file)
+		fmt.Printf("%d : %s\n", i, file.name)
 	}
 
 	log.Print("Please select a file path from this list by entering the relevant number.")
