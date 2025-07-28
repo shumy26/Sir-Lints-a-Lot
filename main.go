@@ -63,7 +63,7 @@ func main() {
 
 	reader := bufio.NewReader(os.Stdin)
 	for {
-		fmt.Print("Enter your choice (scope number, 0 for global): ")
+		fmt.Print("Enter your choice (scope number, 0 for global): \n")
 		input, _ := reader.ReadString('\n')
 		inputStr := strings.TrimSpace(input)
 		inputInt, err := strconv.Atoi(inputStr)
